@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import axios from 'axios';
 
@@ -8,12 +8,12 @@ import { apiKey } from './config';
 
 const getImages = (query: string) =>
   axios.get(
-    `https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=${apiKey}&tags=${query}&per_page=24&format=json&nojsoncallback=1`,
+    `https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=${apiKey}&tags=${query}&per_page=80&format=json&nojsoncallback=1`,
   );
 
 const App = () => {
   const [query, setQuery] = useState('mountain');
-  const [images, setImages] = useState<Image[]>([]);
+  const [images, setImages] = useState<Image[][]>([]);
   const [loading, setLoading] = useState(true);
   const [err, setError] = useState(false);
 
@@ -22,11 +22,20 @@ const App = () => {
       setLoading(true);
 
       try {
+        const images: Image[][] = [];
+
         const response: FlickrImage[] = (await getImages(query)).data.photos.photo;
-        const images = response.map(({ farm, server, id, secret, title }) => ({
-          src: `https://farm${farm}.staticflickr.com/${server}/${id}_${secret}_m.jpg`,
-          title,
-        }));
+        response.forEach(({ farm, server, id, secret, title }, index) => {
+          const indexInNewList = Math.floor(index / 4);
+          const item = {
+            src: `https://farm${farm}.staticflickr.com/${server}/${id}_${secret}_m.jpg`,
+            title,
+          };
+
+          if (images[indexInNewList]) images[indexInNewList].push(item);
+          else images[indexInNewList] = [item];
+        });
+
         if (err) setError(false);
         setLoading(false);
         setImages(images);

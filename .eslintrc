@@ -23,6 +23,7 @@
   "plugins": ["react", "react-hooks", "@typescript-eslint", "prettier", "import", "jsx-a11y"],
   "rules": {
     "no-debugger": "warn",
+    "@typescript-eslint/ban-ts-comment": "warn",
     "react/react-in-jsx-scope": "off",
     "import/order": [
       "error",
