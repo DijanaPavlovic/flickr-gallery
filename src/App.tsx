@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import axios from 'axios';
 
@@ -14,17 +14,26 @@ const getImages = (query: string) =>
 const App = () => {
   const [query, setQuery] = useState('mountain');
   const [images, setImages] = useState<Image[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [err, setError] = useState(false);
 
   useEffect(() => {
     const updateImages = async () => {
-      const response: FlickrImage[] = (await getImages(query)).data.photos.photo;
+      setLoading(true);
 
-      const images = response.map(({ farm, server, id, secret, title }) => ({
-        src: `https://farm${farm}.staticflickr.com/${server}/${id}_${secret}_m.jpg`,
-        title,
-      }));
-
-      setImages(images);
+      try {
+        const response: FlickrImage[] = (await getImages(query)).data.photos.photo;
+        const images = response.map(({ farm, server, id, secret, title }) => ({
+          src: `https://farm${farm}.staticflickr.com/${server}/${id}_${secret}_m.jpg`,
+          title,
+        }));
+        if (err) setError(false);
+        setLoading(false);
+        setImages(images);
+      } catch (err) {
+        setError(true);
+        setLoading(false);
+      }
     };
 
     updateImages();
@@ -33,7 +42,9 @@ const App = () => {
   return (
     <div className="p-6 pt-10 flex flex-col items-center">
       <Header onSearch={setQuery} />
-      <Gallery query={query} images={images} classes="max-w-5xl" />
+      {err && <p>An error has occurred, try again...</p>}
+      {!err && loading && <p>Loading . . .</p>}
+      {!err && !loading && <Gallery query={query} images={images} classes="max-w-5xl" />}
     </div>
   );
 };

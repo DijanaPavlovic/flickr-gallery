@@ -9,9 +9,17 @@ interface GalleryProps {
   classes?: string;
 }
 
-const List: FC<GalleryProps> = ({ query, images, classes }) => (
+const getHeaderText = (query: string, hasImages: boolean) => {
+  return hasImages ? (
+    <span className="capitalize">{query} Pictures</span>
+  ) : (
+    `There are no images for "${query}"`
+  );
+};
+
+const Gallery: FC<GalleryProps> = ({ query, images, classes }) => (
   <div className={`text-center ${classes}`}>
-    <h2 className="capitalize text-lg pb-4">{`${query} Pictures`}</h2>
+    <h2 className="text-lg pb-4">{getHeaderText(query, images.length > 0)}</h2>
     <div className="flex flex-wrap justify-center">
       {images.map(({ src, title }) => (
         <Image src={src} title={title} key={src} />
@@ -20,4 +28,4 @@ const List: FC<GalleryProps> = ({ query, images, classes }) => (
   </div>
 );
 
-export default List;
+export default Gallery;
