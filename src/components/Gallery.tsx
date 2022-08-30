@@ -18,14 +18,14 @@ const getHeaderText = (query: string, hasImages: boolean) => {
 };
 
 const Gallery: FC<GalleryProps> = ({ query, images, classes }) => (
-  <div className={`text-center ${classes}`}>
+  <main className={`text-center ${classes}`}>
     <h2 className="text-lg pb-4">{getHeaderText(query, images.length > 0)}</h2>
     <div className="flex flex-wrap justify-center">
       {images.map(({ src, title }) => (
         <Image src={src} title={title} key={src} />
       ))}
     </div>
-  </div>
+  </main>
 );
 
 export default Gallery;

@@ -21,6 +21,9 @@ const Search: FC<SearchProps> = ({ onSearch }) => {
         className="border p-3 grow"
         value={value}
         onChange={(e) => setValue(e.target.value)}
+        required
+        aria-required
+        aria-label="Search term"
       ></input>
       <button
         type="submit"
