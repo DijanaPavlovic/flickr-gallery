@@ -21,8 +21,8 @@ const getHeaderText = (query: string, hasImages: boolean) => {
   );
 };
 
-const Row = ({ data, index }: { data: ImageType[][]; index: number }) => (
-  <div className="flex justify-center">
+const Row = ({ data, index, style }: { data: ImageType[][]; index: number; style: unknown }) => (
+  <div className="flex justify-center h-48" key={`${index}-${data[index][0].src}`} style={style}>
     {data[index].map(({ src, title }) => (
       <Image src={src} title={title} key={src} />
     ))}
@@ -33,7 +33,7 @@ const Gallery: FC<GalleryProps> = ({ query, images, classes }) => (
   <main className={`text-center ${classes}`}>
     <h2 className="text-lg pb-4">{getHeaderText(query, images.length > 0)}</h2>
     {images.length > 0 && (
-      <List height={750} itemCount={images.length} itemSize={200} width={960} itemData={images}>
+      <List height={750} itemCount={images.length} itemSize={192} width={960} itemData={images}>
         {Row}
       </List>
     )}

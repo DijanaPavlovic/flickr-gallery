@@ -6,7 +6,7 @@ interface ImageProps {
 }
 
 const Image: FC<ImageProps> = ({ src, title }) => (
-  <div className="overflow-hidden my-1.5 mx-2 grow md:w-60 h-44 rounded-md">
+  <div className="overflow-hidden my-1.5 mx-2 grow md:w-60 rounded-md">
     <img
       src={src}
       alt={title}
